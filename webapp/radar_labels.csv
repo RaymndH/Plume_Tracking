@@ -1,0 +1,13 @@
+frame,timestamp,threshold_dbz,comp_idx,n_voxels,cx_km,cy_km,cz_km,label
+T0,15:11 UTC,40,1,135,15.23,34.86,0.83,Column
+T1,15:21 UTC,40,1,373,13.16,34.38,1.31,Column
+T1,15:21 UTC,42,1,5,12.18,34.28,2,Not a column
+T1,15:21 UTC,45,1,26,13.43,34.34,0.65,Column
+T2,15:46 UTC,42,1,19,1.35,28.28,0.68,Not a column
+T2,15:46 UTC,42,2,5,2.28,29.08,2.5,Not a column
+T2,15:46 UTC,42,3,9,2.37,30.02,2.5,Not a column
+T2,15:46 UTC,42,4,59,6.82,32.61,2,Not a column
+T2,15:46 UTC,45,1,38,10.74,33.89,0.74,Column
+T2,15:46 UTC,45,2,5,11.28,32.72,0.5,Column
+T2,15:46 UTC,45,3,169,12.41,35.56,0.89,Column
+T2,15:46 UTC,45,4,87,14.13,36.37,0.77,Column

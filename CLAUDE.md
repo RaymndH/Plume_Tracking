@@ -11,6 +11,10 @@ Use NEXRAD Level-II radar (plus VIIRS/MODIS and NIFC IR perimeters) to track wil
 - `docs/nexrad-webapp.md`: HTML/Three.js radar slicer + Flask server + Dash labeler for labeling pyroconvective columns (ML training data, target ~800 fires)
 - `docs/bug-fire-krgx.md`: Bug Fire 2026 KRGX dual-pol smoke mask, GOES-anchored occupancy tracking, open column-tracking problem
 
+## Code in this repo
+- `webapp/`: slicer HTML + sample labels; Python server/loader/labeler scripts are missing, rebuild from `docs/nexrad-webapp.md` (see `webapp/README.md`)
+- `bug_fire_krgx/`: Bug Fire scripts, `TASKS.md` (full task log 01 to 25), its own `CLAUDE.md` with gridding params, results JSON/NPZ, final perimeter shapefile; large `grids_*.npz` and frame PNGs stay on the Windows machine at `C:\Users\raymondharding\Research\Runs\krgx_hourly\`
+
 ## Next steps
 - Webapp pipeline: Phase 3 `labels_csv_to_patches.py` (3D voxel patches around labeled centroids), then scale to ~800 fires
 - Bug Fire: Task 26, GOES-seeded marker-controlled watershed for column detection
