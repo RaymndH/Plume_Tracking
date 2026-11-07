@@ -1,0 +1,39 @@
+# CLAUDE.md: NEXRAD Radar Plume and Boundary Tracking
+
+Context for Claude Code agents working on this project. Owner: Raymond Harding, UNR Wildfire Science and Engineering Lab (advisor: Dr. Neil Lareau).
+
+## Goal
+Use NEXRAD Level-II radar (plus VIIRS/MODIS and NIFC IR perimeters) to track wildfire smoke plumes and fire boundaries.
+
+## Sub-projects
+- `docs/fireline-pipeline.md`: 2D fireline detection/tracking (repo: github.com/RaymndH/Radar_Firelines)
+- `docs/plume-tracking-3d.md`: 3D plume tracking with tobac + custom linker + persistent homology (Camp Fire, KBBX)
+
+## Environment
+- Dev: Windows + Anaconda, env `geo_env` (Python 3.11)
+- HPC: `atar` (~256 cores, NVIDIA GPUs) and `atar2`; large data on atar, Box for sync, Google Drive for archives
+- Key libs: pyart, wradlib, tobac, gudhi, scikit-image, plotly/kaleido, geopandas, GDAL, netCDF4, xarray, boto3, alphashape, shapely 2.x
+
+## Data sources
+- NEXRAD: public S3 bucket `unidata-nexrad-level2`; use an unsigned boto3 client (`Config(signature_version=UNSIGNED)`)
+- FIRMS/VIIRS: API key read from env var `FIRMS_API_KEY` (never commit keys)
+- NIFC IR perimeters for validation
+
+## Conventions
+- Projection: radar-centered aeqd; recreate the proj object per radar site (stale proj gives wrong XY when switching fires)
+- Gridding: cKDTree-based (~23x faster than `pyart.map.grid_from_radars`)
+- Stage 1 output: NetCDF, 30x30 km Cartesian, 100 m resolution, zlib-compressed
+
+## Fires processed
+Camp 2018 (KBBX), Bear 2020, Beaver 2014 (KMAX), Lolo Peak 2017 (KMSX), Riverside 2020 (KRTX)
+
+## Known gotchas (read before debugging)
+- `.gz` S3 keys: `fetch_bytes()` in `async_preprocess.py` must `gzip.decompress` when key ends in `.gz`, or pyart fails with "unknown compression record"
+- `firelines_alg.py` once set `PYTHONBREAKPOINT=0` at import, disabling `breakpoint()`; use `ipdb.set_trace()`
+- pdb: list comprehensions fail inside pdb; assign intermediates or use `exec()`
+- `alphashape.optimizealpha()` breaks on shapely 2.x (MultiPoint not iterable); use fixed alpha (~50), >=4 point guard, try/except fallback; seed with IR perimeter boundary and keep the largest polygon
+- gudhi `min_persistence` does not reliably filter `cofaces_of_persistence_pairs()`; filter births/deaths/persistence manually
+- Downsample with `block_reduce(..., np.max)` not striding, to keep peak dBZ
+- `marching_cubes` needs each bbox dim > step_size; clamp per region
+- Colab: pin `kaleido==0.2.1` before any other install/import of plotly
+- Plotly cost: `go.Volume` slow at export, `go.Isosurface` slow interactively, precomputed `Mesh3d` cheapest
