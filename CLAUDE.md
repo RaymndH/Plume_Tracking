@@ -8,6 +8,16 @@ Use NEXRAD Level-II radar (plus VIIRS/MODIS and NIFC IR perimeters) to track wil
 ## Sub-projects
 - `docs/fireline-pipeline.md`: 2D fireline detection/tracking (repo: github.com/RaymndH/Radar_Firelines)
 - `docs/plume-tracking-3d.md`: 3D plume tracking with tobac + custom linker + persistent homology (Camp Fire, KBBX)
+- `docs/nexrad-webapp.md`: HTML/Three.js radar slicer + Flask server + Dash labeler for labeling pyroconvective columns (ML training data, target ~800 fires)
+- `docs/bug-fire-krgx.md`: Bug Fire 2026 KRGX dual-pol smoke mask, GOES-anchored occupancy tracking, open column-tracking problem
+
+## Next steps
+- Webapp pipeline: Phase 3 `labels_csv_to_patches.py` (3D voxel patches around labeled centroids), then scale to ~800 fires
+- Bug Fire: Task 26, GOES-seeded marker-controlled watershed for column detection
+
+## Working style
+- Debug iteratively from actual error output, not speculative fixes
+- Flag deviations from spec, circular logic, and physically implausible results before building on them
 
 ## Environment
 - Dev: Windows + Anaconda, env `geo_env` (Python 3.11)
